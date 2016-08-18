@@ -1,0 +1,38 @@
+---
+title: "ToothGrowth Inferential Data Analysis"
+author: "Iulia Zidaru"
+date: "18 Aug 2016"
+output: pdf_document
+---
+
+## Load the ToothGrowth data
+
+```{r}
+library(ggplot2) 
+data(ToothGrowth)
+```
+
+## Provide a basic summary of the data and perform some basic exploratory data analyses
+
+```{r}
+str(ToothGrowth)
+summary(ToothGrowth)
+dim(ToothGrowth)
+head(ToothGrowth)
+tail(ToothGrowth)
+
+qplot(supp,len,data=ToothGrowth, facets=~dose, main="Tooth growth of guinea pigs", ylab="Tooth length") + geom_boxplot(aes(fill = supp))
+
+qplot(dose,len,data=ToothGrowth, facets=~supp, main="Tooth growth of guinea pigs", ylab="Tooth length") + geom_boxplot()
+```
+
+
+## Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose.
+
+```{r}
+t.test(ToothGrowth$len, ToothGrowth$dose, paired=T, var.equal=T, alt="two.sided")
+```
+
+## State your conclusions and the assumptions needed for your conclusions.
+
+As the dose is higher, the lenght of the tooth is higher. OJ supplement produces higher growth than VJ suplement.
