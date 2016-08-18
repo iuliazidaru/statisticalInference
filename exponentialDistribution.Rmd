@@ -1,0 +1,71 @@
+---
+title: "Exponential Distribution"
+author: "Iulia Zidaru"
+date: "16 Aug 2016"
+output: pdf_document
+---
+
+## Overview
+In this project I investigate the exponential distribution in R and compare it with the Central Limit Theorem. 
+
+## Simulations
+The exponential distribution can be simulated in R with rexp(n, lambda) where lambda is the rate parameter.
+We generate some random samples to see how the distribution looks like.
+
+```{r}
+set.seed(5)
+lambda <- .2
+par(mfrow=c(2,2))
+hist(rexp(10, lambda))
+hist(rexp(100, lambda))
+hist(rexp(1000, lambda))
+hist(rexp(10000, lambda))
+```
+
+## Sample Mean versus Theoretical Mean
+
+The distribution of 1000 averages of 40 exponentials.
+```{r}
+mns = NULL
+for (i in 1 : 1000) mns = c(mns, mean(rexp(40, 0.2)))
+
+```
+
+```{r}
+sampleMean <- mean(mns)
+teoreticalMean <- 1/0.2
+sampleMean
+teoreticalMean
+```
+
+Conclusion: The mean of the simulated samples is close to theoretical mean.
+
+## Sample Variance versus Theoretical Variance
+
+```{r}
+sampleVar <- var(mns)
+teoreticalVar <- ((1/0.2)/sqrt(40))^2
+sampleVar
+teoreticalVar
+```
+
+Conclusion: The variance of the simulated samples is close to theoretical variance.
+
+## Distribution
+
+```{r}
+library(ggplot2)
+data <- as.data.frame(mns)
+
+ggplot(data = data, aes(x=mns)) + 
+         geom_histogram(aes(y=..density..), binwidth=.25, col="black") +
+         geom_vline(aes(xintercept=mean(mns),colour="red")) +
+         geom_text(aes(x=mean(mns),label="\nsample mean",y=0.2),colour="black",angle=90)+
+         xlab("Averages of the distribution") + ylab("Density")+
+         ggtitle("Figure 1: Distribution of the averages of \n40 random exponentials (1000 simulations)") +
+         theme(legend.position="none") +
+         stat_function(fun=dnorm,args=list(mean=5,sd=sd(mns)))
+
+```
+
+Conclusion: The distribution is standard normal.
